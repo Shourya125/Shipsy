@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import connectDB from "./database/dbconfig.js"
-
+import userRoutes from "./routes/userRoutes.js"
 
 const app = express()
 
@@ -13,10 +13,12 @@ dotenv.config()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL,
     credentials:true
 }))
 connectDB()
+
+app.use("/api/v1/user",userRoutes)
 
 const PORT = process.env.PORT || 3000
 

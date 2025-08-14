@@ -1,28 +1,47 @@
 import mongoose from "mongoose";
 
 const shipmentSchema = new mongoose.Schema({
-    name: {
+    customer: {
         type: String,
         required: true
     },
-    email: {
+    status: {
         type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
+        enum: ["Pending","In Transit","Delivered","Cancelled"],
         required: true
     },
-    isAdmin: {
+    isFragile: {
         type: Boolean,
-        default: false 
+        default: false
     },
-    photoUrl: {
+    value: {
+        type: Number,
+        required: true
+    },
+    description: {
         type: String,
-        default: ""
+        required: true
     },
-
+    estimatedDeliveryDate: {
+        type: Date,
+        required: true
+    },
+    shippedDate:{
+        type: Date,
+    },
+    origin: {
+        type: String,
+        required: true
+    },
+    destination: {
+        type: String,
+        required: true
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User"
+    }
 }, { timestamps: true })
 
 const Shipment = mongoose.model("Shipment", shipmentSchema)
