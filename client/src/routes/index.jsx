@@ -5,6 +5,8 @@ import RegisterPage from "../pages/RegisterPage";
 import ShipmentDetails from "../pages/ShipmentDetails";
 import CreateShipment from "../pages/CreateShipment";
 import ShipmentsList from "../pages/ShipmentsList";
+import UpdateShipmentDetails from "../pages/UpdateShipmentDetails";
+import Welcome from "../pages/Welcome";
 
 const router = createBrowserRouter([
     {
@@ -12,8 +14,12 @@ const router = createBrowserRouter([
         element: <HomePage />,
         children: [
             {
-                path: "shipment",
+                path: "shipment/:sid",
                 element: <ShipmentDetails />,
+            },
+            {
+                path: "",
+                element: <Welcome />
             },
             {
                 path: "create-shipment",
@@ -22,7 +28,12 @@ const router = createBrowserRouter([
             {
                 path: "shipments-list",
                 element: <ShipmentsList />
+            },
+            {
+                path: "update-shipment/:sid",
+                element: <UpdateShipmentDetails />
             }
+
         ],
     },
     {

@@ -1,11 +1,18 @@
 import express from "express"
 import createShipmentController from "../controllers/shipmentControllers.js/createShipmentController.js"
 import getShipmentsController from "../controllers/shipmentControllers.js/getShipments.js"
+import shipmentDetailController from "../controllers/shipmentControllers.js/shipmentDetailController.js"
+import updateShipmentDetailController from "../controllers/shipmentControllers.js/updateShipmentDetailController.js"
+import deleteShipmentController from "../controllers/shipmentControllers.js/deleteShipment.js"
+
 
 const router = express.Router()
 
 router.route("/create-shipment").post(createShipmentController)
 router.route("/shipments-list").get(getShipmentsController)
+router.route("/shipment-details/:sid").get(shipmentDetailController)
+router.route("/update-shipment/:sid").put(updateShipmentDetailController)
+router.route("/delete-shipment/:sid").delete(deleteShipmentController)
 
 
 export default router

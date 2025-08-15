@@ -1,27 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { IoCheckmark, IoClose } from "react-icons/io5";
+import { IoCheckmark, IoClose, IoEye, IoPencil, IoTrash } from "react-icons/io5";
 import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const ShipmentsList = () => {
     const user = useSelector(state => state?.user);
     const [shipments, setShipments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5; // Change this to control rows per page
+    const navigate = useNavigate()
 
     const getShipments = async () => {
         try {
             const URL = `${import.meta.env.VITE_BACKEND_URL}/shipment/shipments-list`;
             const response = await axios.get(URL);
             setShipments(response?.data?.shipments || []);
+            console.log("shipments", response?.data?.shipments)
         } catch (error) {
             console.log("error", error);
         }
     };
 
     useEffect(() => {
+        if (!user) {
+            navigate("/")
+        }
+    }, [])
+
+    useEffect(() => {
         getShipments();
     }, []);
+
+    const handleDeleteShipment = async (e, sid) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const URL = `${import.meta.env.VITE_BACKEND_URL}/shipment/delete-shipment/${sid}`;
+
+        try {
+            const response = await axios.delete(URL)
+            console.log("response", response)
+            if (response?.data?.success) {
+                toast.success(response?.data?.message)
+                getShipments()
+            }
+        }
+        catch (error) {
+            console.log("Error in deleting shipment", error)
+        }
+
+
+    }
 
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -36,6 +67,7 @@ const ShipmentsList = () => {
             <table className="table-auto w-full border border-gray-300">
                 <thead>
                     <tr className="bg-slate-200">
+                        <th className="border px-2 py-1 text-center"></th>
                         <th className="border px-2 py-1 text-center">Customer</th>
                         <th className="border px-2 py-1 text-center">Status</th>
                         <th className="border px-2 py-1 text-center">Delivery Date</th>
@@ -46,19 +78,31 @@ const ShipmentsList = () => {
                 <tbody>
                     {currentItems.map((s) => (
                         <tr key={s._id} className="bg-slate-50">
-                            <td className="border px-2 py-1 text-center">{s.customer}</td>
-                            <td className="border px-3 py-2 text-center">
+                            <td className="border px-2 py-1 text-center flex flex-row items-center justify-center gap-3">
+                                <Link to={`/shipment/${s._id}`}><IoEye size={25} color="blue" style={{ cursor: "pointer" }} /></Link>
                                 {
-                                    s.status === "Pending" ? (
-                                        <span className='bg-yellow-500 text-white p-2'>{s.status}</span>
-                                    ) : s.status === "Completed" ? (
-                                        <span className='bg-green-500 text-white p-2'>{s.status}</span>
-                                    ) : s.status === "Cancelled" ? (
-                                        <span className='bg-red-500 text-white p-2'>{s.status}</span>
-                                    ) : (
-                                        <span className='bg-cyan-500 text-white p-2'>{s.status}</span>
+                                    user?.isAdmin && (
+                                        <>
+                                            <Link to={`/update-shipment/${s._id}`}><IoPencil size={25} color="green" style={{ cursor: "pointer" }} /></Link>
+                                            <button onClick={(e) => handleDeleteShipment(e, s._id)}><IoTrash size={25} color="red" style={{ cursor: "pointer" }} /></button>
+                                        </>
                                     )
                                 }
+                            </td>
+                            <td className="border px-2 py-1 text-center">{s.customer}</td>
+                            <td className="border px-3 py-2 text-center">
+                                {(() => {
+                                    const status = s.status?.trim().toLowerCase();
+                                    if (status === "pending") {
+                                        return <span className="bg-yellow-500 text-white p-2">{s.status}</span>;
+                                    } else if (status === "delivered") {
+                                        return <span className="bg-green-500 text-white p-2">{s.status}</span>;
+                                    } else if (status === "cancelled") {
+                                        return <span className="bg-red-500 text-white p-2">{s.status}</span>;
+                                    } else {
+                                        return <span className="bg-cyan-500 text-white p-2">{s.status}</span>;
+                                    }
+                                })()}
                             </td>
                             <td className="border px-2 py-1 text-center">
                                 {new Date(s.estimatedDeliveryDate).toLocaleDateString("en-IN", {
