@@ -30,9 +30,18 @@ const loginController = async (req,res) => {
         }
 
         const token = await jwt.sign({userId:user._id}, process.env.SECRET_KEY, { expiresIn: '1d' })
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, sameSite: "strict" }).json({
+
+        const cookieOptions = {
+            httpOnly : true,
+            secure : false,
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000
+        }
+
+        return res.cookie("token", token, cookieOptions).status(200).json({
             success:true,
             message:`Welcome back ${user.name}`,
+            token: token,
             user
         })
 

@@ -5,8 +5,19 @@ import { IoClose } from "react-icons/io5";
 import uploadFile from "../helpers/uploadFile.jsx";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
+
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -15,7 +26,6 @@ const RegisterPage = () => {
   });
 
   const [uploadPhoto, setUploadPhoto] = useState("");
-  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;

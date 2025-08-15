@@ -3,14 +3,25 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken, setUser } from "../store/userSlice";
+import { useEffect } from "react";
 
-const RegisterPage = () => {
+const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
+
   const [data, setData] = useState({
     email: "",
     password: "",
   });
-
-  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -30,11 +41,19 @@ const RegisterPage = () => {
     const URL = `${import.meta.env.VITE_BACKEND_URL}/user/login`;
 
     try {
-      const response = await axios.post(URL, data);
+      const response = await axios({
+        method: "post",
+        url: URL,
+        data: data,
+        withCredentials: true,
+      });
       console.log("response", response);
 
       if (response.data.success) {
         toast.success(response.data.message);
+        dispatch(setToken(response?.data?.token));
+        localStorage.setItem("token", response?.data?.token);
+
         setData({
           email: "",
           password: "",
@@ -116,4 +135,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;
