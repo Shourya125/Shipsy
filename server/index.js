@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import connectDB from "./database/dbconfig.js"
 import userRoutes from "./routes/userRoutes.js"
+import shipmentRoutes from "./routes/shipmentRoutes.js"
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use(cors({
 connectDB()
 
 app.use("/api/v1/user",userRoutes)
+app.use("/api/v1/shipment",shipmentRoutes)
 
 const PORT = process.env.PORT || 3000
 

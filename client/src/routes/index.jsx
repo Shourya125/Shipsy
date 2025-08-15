@@ -4,6 +4,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import ShipmentDetails from "../pages/ShipmentDetails";
 import CreateShipment from "../pages/CreateShipment";
+import ShipmentsList from "../pages/ShipmentsList";
 
 const router = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
             {
                 path: "create-shipment",
                 element: <CreateShipment />
+            },
+            {
+                path: "shipments-list",
+                element: <ShipmentsList />
             }
         ],
     },
