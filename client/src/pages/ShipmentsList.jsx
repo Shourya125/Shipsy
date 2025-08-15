@@ -74,6 +74,18 @@ const ShipmentsList = () => {
         handleSearch()
     }, [search])
 
+    const handleSort = async () => {
+        const URL = `${import.meta.env.VITE_BACKEND_URL}/shipment/sort`;
+        try {
+            const response = await axios.get(URL);
+            setShipments(response?.data?.shipments)
+            console.log("response", response)
+        }
+        catch (error) {
+            console.log("Sort error", error)
+        }
+    }
+
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -85,16 +97,22 @@ const ShipmentsList = () => {
         <div className="bg-slate-300 w-full p-3">
             <div className='flex flex-row justify-between'>
                 <h1 className='text-2xl text-cyan-800 ml-2 mb-5 mt-2'>Shipments</h1>
-                <div className='bg-white rounded h-14 overflow-hidden flex '>
-                    <input
-                        type='text'
-                        placeholder='Search by customer...'
-                        className='w-full outline-none py-1 h-full px-4'
-                        onChange={(e) => setSearch(e.target.value)}
-                        value={search}
-                    />
-                    <div className='h-14 w-14 flex justify-center items-center'>
-                        <IoSearchOutline size={25} />
+
+                <div className='flex flex-row items-center gap-3'>
+                    <div className='bg-white text-slate-700 p-2 rounded' >
+                        <button onClick={handleSort}>Sort by Delivery date</button>
+                    </div>
+                    <div className='bg-white rounded h-14 overflow-hidden flex '>
+                        <input
+                            type='text'
+                            placeholder='Search by customer...'
+                            className='w-full outline-none py-1 h-full px-4'
+                            onChange={(e) => setSearch(e.target.value)}
+                            value={search}
+                        />
+                        <div className='h-14 w-14 flex justify-center items-center'>
+                            <IoSearchOutline size={25} />
+                        </div>
                     </div>
                 </div>
             </div>

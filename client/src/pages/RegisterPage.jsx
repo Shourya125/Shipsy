@@ -96,7 +96,7 @@ const RegisterPage = () => {
           className="w-full h-full"
         />
       </div>
-      <div className="bg w-full md:w-2/5 h-screen bg-slate-300 flex items-center justify-center">
+      <div className="bg w-full md:w-2/5 h-screen bg-slate-300 flex items-center justify-center overflow-scroll p-2">
         <div className="bg-slate-200 py-5 px-10 w-3/4">
           <h3 className="text-cyan-800 text-2xl mt-2">
             Welcome to Shipment app!

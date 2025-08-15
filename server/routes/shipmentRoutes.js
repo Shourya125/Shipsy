@@ -5,6 +5,7 @@ import shipmentDetailController from "../controllers/shipmentControllers.js/ship
 import updateShipmentDetailController from "../controllers/shipmentControllers.js/updateShipmentDetailController.js"
 import deleteShipmentController from "../controllers/shipmentControllers.js/deleteShipment.js"
 import searchShipmentController from "../controllers/shipmentControllers.js/searchShipmentController.js"
+import sortShipmentController from "../controllers/shipmentControllers.js/sortShipmentController.js"
 
 
 const router = express.Router()
@@ -15,6 +16,7 @@ router.route("/shipment-details/:sid").get(shipmentDetailController)
 router.route("/update-shipment/:sid").put(updateShipmentDetailController)
 router.route("/delete-shipment/:sid").delete(deleteShipmentController)
 router.route("/search").post(searchShipmentController)
+router.route("/sort").get(sortShipmentController)
 
 
 export default router

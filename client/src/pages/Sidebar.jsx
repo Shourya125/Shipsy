@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, setToken } from "../store/userSlice";
 import toast from "react-hot-toast";
+import { PiUserCircle } from "react-icons/pi";
 
 const Sidebar = () => {
     const user = useSelector(state => state?.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+    console.log("user state", user)
 
     const handleLogout = async () => {
         try {
@@ -32,6 +34,20 @@ const Sidebar = () => {
     return (
         <div className="bg-slate-500 h-full hidden md:block pr-2">
             <div className="flex flex-col gap-2 py-2">
+                <div className="flex flex-row items-center justify-center gap-3 mt-3 mb-3">
+                    {
+                        user?.profile_pic ? (
+                            <img src={user?.profile_pic} height={40} width={40} alt="image" />
+                        ) : (
+                            <span className="text-slate-100"><PiUserCircle size={40} /></span>
+                        )
+                    }
+                    {
+                        user?.name && (
+                            <span className="text-slate-100 text-2xl">{user.name}</span>
+                        )
+                    }
+                </div>
                 {
                     user?.isAdmin && (
                         <Link to={"/create-shipment"} className="p-3 bg-slate-200 text-lg hover:bg-cyan-800 hover:text-white w-full block">
