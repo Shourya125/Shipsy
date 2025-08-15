@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { IoCheckmark, IoClose, IoEye, IoPencil, IoTrash } from "react-icons/io5";
 import { useSelector } from 'react-redux';
+import { IoSearchOutline } from "react-icons/io5";
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -10,6 +11,7 @@ const ShipmentsList = () => {
     const [shipments, setShipments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5; // Change this to control rows per page
+    const [search, setSearch] = useState("")
     const navigate = useNavigate()
 
     const getShipments = async () => {
@@ -54,6 +56,24 @@ const ShipmentsList = () => {
 
     }
 
+    const handleSearch = async () => {
+        const URL = `${import.meta.env.VITE_BACKEND_URL}/shipment/search`;
+        try {
+            const response = await axios.post(URL, {
+                search: search
+            })
+            setShipments(response?.data?.shipments)
+            console.log("response", response)
+        }
+        catch (error) {
+            console.log("Search error", error)
+        }
+    }
+
+    useEffect(() => {
+        handleSearch()
+    }, [search])
+
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -63,8 +83,22 @@ const ShipmentsList = () => {
 
     return (
         <div className="bg-slate-300 w-full p-3">
-            <h1 className='text-2xl text-cyan-800 ml-2 mb-5 mt-2'>Shipments</h1>
-            <table className="table-auto w-full border border-gray-300">
+            <div className='flex flex-row justify-between'>
+                <h1 className='text-2xl text-cyan-800 ml-2 mb-5 mt-2'>Shipments</h1>
+                <div className='bg-white rounded h-14 overflow-hidden flex '>
+                    <input
+                        type='text'
+                        placeholder='Search by customer...'
+                        className='w-full outline-none py-1 h-full px-4'
+                        onChange={(e) => setSearch(e.target.value)}
+                        value={search}
+                    />
+                    <div className='h-14 w-14 flex justify-center items-center'>
+                        <IoSearchOutline size={25} />
+                    </div>
+                </div>
+            </div>
+            <table className="table-auto w-full border border-gray-300 mt-5">
                 <thead>
                     <tr className="bg-slate-200">
                         <th className="border px-2 py-1 text-center"></th>
