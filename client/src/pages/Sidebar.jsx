@@ -48,6 +48,9 @@ const Sidebar = () => {
                         )
                     }
                 </div>
+                <Link to={"/"} className="p-3 bg-slate-200 text-lg hover:bg-cyan-800 hover:text-white w-full block">
+                    Home
+                </Link>
                 {
                     user?.isAdmin && (
                         <Link to={"/create-shipment"} className="p-3 bg-slate-200 text-lg hover:bg-cyan-800 hover:text-white w-full block">

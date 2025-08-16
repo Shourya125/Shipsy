@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import Spinner from "../components/Spinner.jsx";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ const RegisterPage = () => {
   });
 
   const [uploadPhoto, setUploadPhoto] = useState("");
+  const [rp, setrp] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -86,6 +89,24 @@ const RegisterPage = () => {
     }
     console.log("data", data);
   };
+
+  const suggestPassword = async () => {
+    const URL = `${import.meta.env.VITE_BACKEND_URL}/user/suggest`;
+
+    try {
+      setIsLoading(true)
+      const response = await axios.get(URL)
+      setIsLoading(false)
+      setrp(response?.data?.pass)
+      console.log("response", response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    suggestPassword()
+  }, [])
 
   return (
     <div className="h-screen flex flex-row">
@@ -150,6 +171,12 @@ const RegisterPage = () => {
                 required
               />
             </div>
+
+            <p className="text-slate-700">Recommended Password :
+              {
+                isLoading ? <Spinner /> : <p className="text-cyan-800">{rp}</p>
+              }
+            </p>
 
             <div className="flex flex-col gap-1">
               <label htmlFor="profile_pic" className="text-cyan-800">

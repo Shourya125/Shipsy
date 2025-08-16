@@ -7,6 +7,8 @@ import deleteShipmentController from "../controllers/shipmentControllers.js/dele
 import searchShipmentController from "../controllers/shipmentControllers.js/searchShipmentController.js"
 import sortShipmentController from "../controllers/shipmentControllers.js/sortShipmentController.js"
 import aiController from "../controllers/shipmentControllers.js/aiController.js"
+import getSloganController from "../controllers/shipmentControllers.js/getSloganController.js"
+import botController from "../controllers/shipmentControllers.js/botController.js"
 
 
 const router = express.Router()
@@ -19,6 +21,8 @@ router.route("/delete-shipment/:sid").delete(deleteShipmentController)
 router.route("/search").post(searchShipmentController)
 router.route("/sort").get(sortShipmentController)
 router.route("/ai").post(aiController)
+router.route("/slogan").get(getSloganController)
+router.route("/bot").post(botController)
 
 
 export default router

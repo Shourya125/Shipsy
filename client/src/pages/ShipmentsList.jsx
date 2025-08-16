@@ -125,7 +125,7 @@ const ShipmentsList = () => {
 
                 <div className='flex flex-row items-center gap-3'>
                     <div className='bg-white text-slate-700 p-2 rounded' >
-                        <button onClick={handleSort}>Sort by Delivery date</button>
+                        <button onClick={handleSort} className='cursor-pointer hover:text-cyan-700'>Sort by Delivery date</button>
                     </div>
                     <div className='bg-white rounded h-14 overflow-hidden flex '>
                         <input
@@ -264,11 +264,11 @@ const ShipmentsList = () => {
                             className="bg-white text-slate-900 p-1 w-full resize-none overflow-y-auto overflow-x-visible break-words h-[150px] mt-20"
                             rows={1} // start with one row
                         ></textarea>
-                        <button type='submit' className='ml-1 absolute bottom-0 right-0'><span className='text-3xl text-black hover:text-4xl hover:text-cyan-600'>ᗔ</span></button>
+                        <button type='submit' className='ml-1 absolute bottom-0 right-0 cursor-pointer'><span className='text-3xl text-black hover:text-4xl hover:text-cyan-600'>ᗔ</span></button>
                     </form>
 
                 </div>
-                <div className='bg-green-200 mt-5 w-fit mx-auto p-2'>
+                <div className='bg-green-200 mt-5 w-fit mx-auto'>
 
                     {
                         isloading ? <Spinner /> : <p>{answer}</p>

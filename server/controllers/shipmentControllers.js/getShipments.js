@@ -11,7 +11,7 @@ const getShipmentsController = async (req, res) => {
       shipments: shipments,
     });
   } catch (error) {
-    console.error("Create shipment error:", error);
+    console.error("Get shipment error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to get Shipments",
