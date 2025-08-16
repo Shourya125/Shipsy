@@ -29,7 +29,7 @@ const ShipmentDetails = () => {
 
 
     return (
-        <div className="bg-slate-200 w-full">
+        <div className="bg-slate-200 w-full overflow-auto">
             <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow mt-6">
                 <h2 className="text-2xl font-semibold mb-4 text-cyan-800">Shipment Details</h2>
 

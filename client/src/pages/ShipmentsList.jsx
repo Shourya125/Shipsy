@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { IoSearchOutline } from "react-icons/io5";
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Spinner from '../components/Spinner';
 
 const ShipmentsList = () => {
     const user = useSelector(state => state?.user);
@@ -14,6 +15,7 @@ const ShipmentsList = () => {
     const itemsPerPage = 5; // Change this to control rows per page
     const [search, setSearch] = useState("")
     const [answer, setAnswer] = useState("")
+    const [isloading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
     const getShipments = async () => {
@@ -93,9 +95,11 @@ const ShipmentsList = () => {
         e.stopPropagation()
         const URL = `${import.meta.env.VITE_BACKEND_URL}/shipment/ai`;
         try {
+            setIsLoading(true)
             const response = await axios.post(URL, {
                 prompt: ai
             })
+            setIsLoading(false)
             console.log("response ai", response)
             if (response?.data?.success) {
                 setAnswer(response?.data?.data)
@@ -115,7 +119,7 @@ const ShipmentsList = () => {
     const totalPages = Math.ceil(shipments.length / itemsPerPage);
 
     return (
-        <div className="bg-slate-300 w-full p-3">
+        <div className="bg-slate-300 w-full p-3 overflow-auto">
             <div className='flex flex-row justify-between'>
                 <h1 className='text-2xl text-cyan-800 ml-2 mb-5 mt-2'>Shipments</h1>
 
@@ -250,7 +254,7 @@ const ShipmentsList = () => {
                     Next
                 </button>
             </div>
-            <div className='flex flex-col gap-3'>
+            <div className='flex flex-col gap-10'>
                 <div className='flex items-center justify-center h-[150px] mt-15 w-lg mx-auto'>
                     <form onSubmit={handleAi} className='w-full relative '>
                         <textarea
@@ -264,8 +268,11 @@ const ShipmentsList = () => {
                     </form>
 
                 </div>
-                <div className='bg-green-200 mt-5'>
-                    <p>{answer}</p>
+                <div className='bg-green-200 mt-5 w-fit mx-auto p-2'>
+
+                    {
+                        isloading ? <Spinner /> : <p>{answer}</p>
+                    }
                 </div>
             </div>
         </div>

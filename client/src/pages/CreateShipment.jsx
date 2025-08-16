@@ -70,7 +70,7 @@ const CreateShipment = () => {
     };
 
     return (
-        <div className='bg-slate-300 flex items-center justify-center w-full overflow-scroll h-screen'>
+        <div className='bg-slate-300 flex items-center justify-center w-full overflow-auto h-screen'>
             <div className='bg-slate-100 px-10 py-10 w-4/5 my-auto'>
                 <h1 className='text-cyan-900 text-2xl'>Create Shipment</h1>
                 <form

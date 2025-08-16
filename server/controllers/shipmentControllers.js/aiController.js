@@ -5,11 +5,11 @@ const aiController = async (req, res) => {
     const ai = new GoogleGenAI({ apiKey: process.env.API });
     try {
         const { prompt } = req.body
-        const shipments = await Shipment.find({}).select("-password-user-_id");
+        const shipments = await Shipment.find({}).select("-password").select("-user").select("-_id");
 
         const response = await ai.models.generateContent({
             model: "gemini-2.0-flash",
-            contents: `${shipments} is data for refrence and question is ${prompt}`,
+            contents: `${shipments} is data for refrence and question is ${prompt} just give answer to prompt in 10 to 20 words not print the entire refrence data `,
         });
 
 
