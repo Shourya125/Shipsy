@@ -1,7 +1,8 @@
 import Shipment from "../../models/shipmentModel.js";
-
+import { GoogleGenAI } from "@google/genai";
 
 const createShipmentController = async (req, res) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API });
   try {
     const {
       customer,
@@ -30,6 +31,37 @@ const createShipmentController = async (req, res) => {
         message: "Please fill all required fields",
       });
     }
+
+            const date = new Date().toDateString()
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: `if ${estimatedDeliveryDate} < ${date} give yes else no just yes or no`,
+        });
+        
+
+        const text = response.text.toString().trim().toLowerCase()
+        console.log("text",text)
+        if (text == "yes") {
+            return res.status(400).json({
+                message: "Estimated delivery date must be greater than or equal to present date",
+                success: false
+            })
+        }
+
+        const response_val = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: `${value} <=0 give yes else no just yes or no`,
+        });
+
+        const text_val = response_val.text.toString().trim().toLowerCase()
+        console.log("text_val",text_val)
+        if (text_val === "yes") {
+            return res.status(400).json({
+                message: "Value must be greater than zero",
+                success: false
+            });
+        }
 
     const newShipment = new Shipment({
       customer,

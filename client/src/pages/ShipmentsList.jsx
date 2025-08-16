@@ -9,9 +9,11 @@ import toast from 'react-hot-toast';
 const ShipmentsList = () => {
     const user = useSelector(state => state?.user);
     const [shipments, setShipments] = useState([]);
+    const [ai, setAi] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5; // Change this to control rows per page
     const [search, setSearch] = useState("")
+    const [answer, setAnswer] = useState("")
     const navigate = useNavigate()
 
     const getShipments = async () => {
@@ -83,6 +85,25 @@ const ShipmentsList = () => {
         }
         catch (error) {
             console.log("Sort error", error)
+        }
+    }
+
+    const handleAi = async (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const URL = `${import.meta.env.VITE_BACKEND_URL}/shipment/ai`;
+        try {
+            const response = await axios.post(URL, {
+                prompt: ai
+            })
+            console.log("response ai", response)
+            if (response?.data?.success) {
+                setAnswer(response?.data?.data)
+                setAi("")
+            }
+        }
+        catch (error) {
+            console.log("AI error", error)
         }
     }
 
@@ -228,6 +249,24 @@ const ShipmentsList = () => {
                 >
                     Next
                 </button>
+            </div>
+            <div className='flex flex-col gap-3'>
+                <div className='flex items-center justify-center h-[150px] mt-15 w-lg mx-auto'>
+                    <form onSubmit={handleAi} className='w-full relative '>
+                        <textarea
+                            value={ai}
+                            placeholder="Ask anything about shipments..."
+                            onChange={(e) => setAi(e.target.value)}
+                            className="bg-white text-slate-900 p-1 w-full resize-none overflow-y-auto overflow-x-visible break-words h-[150px] mt-20"
+                            rows={1} // start with one row
+                        ></textarea>
+                        <button type='submit' className='ml-1 absolute bottom-0 right-0'><span className='text-3xl text-black hover:text-4xl hover:text-cyan-600'>ᗔ</span></button>
+                    </form>
+
+                </div>
+                <div className='bg-green-200 mt-5'>
+                    <p>{answer}</p>
+                </div>
             </div>
         </div>
     );
