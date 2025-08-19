@@ -52,6 +52,7 @@ const LoginPage = () => {
       if (response.data.success) {
         toast.success(response.data.message);
         dispatch(setToken(response?.data?.token));
+        dispatch(setUser(response?.data?.user))
         localStorage.setItem("token", response?.data?.token);
 
         setData({

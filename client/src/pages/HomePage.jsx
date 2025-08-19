@@ -22,7 +22,6 @@ const HomePage = () => {
 
       if (response?.data?.logout) {
         dispatch(logout());
-        navigate("/email");
       }
     } catch (error) {
       console.log("error", error);

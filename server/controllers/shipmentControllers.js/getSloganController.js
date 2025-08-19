@@ -20,7 +20,7 @@ const getSloganController = async (req,res) => {
             slogan: text,
         });
     }
-    catch{
+    catch(error){
         console.error("Get slogan error:", error);
     res.status(500).json({
       success: false,
